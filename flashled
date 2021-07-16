@@ -1,0 +1,74 @@
+#!/usr/bin/python
+
+
+import os
+import threading
+import sys
+import RPi.GPIO as GPIO
+import time
+
+
+pid = str(os.getpid())
+pidfile = "/tmp/flashled.pid"
+
+if os.path.isfile(pidfile):
+    f = open(pidfile,"r")
+    oldpid = f.read()
+    os.system("sudo kill -HUP "+oldpid)
+    f.close()
+    os.remove(pidfile)
+file(pidfile, 'w').write(pid)
+
+class StopThread(StopIteration): pass
+
+threading.SystemExit = SystemExit, StopThread
+
+class Thread2(threading.Thread):
+
+    def stop(self):
+        self.__stop = True
+
+    def _bootstrap(self):
+        if threading._trace_hook is not None:
+            raise ValueError('Cannot run thread with tracing!')
+        self.__stop = False
+        sys.settrace(self.__trace)
+        super()._bootstrap()
+
+    def __trace(self, frame, event, arg):
+        if self.__stop:
+            raise StopThread()
+        return self.__trace
+#############################################################
+
+led = int(sys.argv[1])
+ondely = float(sys.argv[2])
+offdely = float(sys.argv[3])
+runlen = int(sys.argv[4])
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(led, GPIO.OUT)
+
+def led_flash():
+    while True:
+        GPIO.output(led,GPIO.LOW)
+        time.sleep(offdely)
+        GPIO.output(led, GPIO.HIGH)
+        time.sleep(ondely)
+
+# x gets defined somewhere
+
+x = 1;
+while True:
+    if x == 1:
+        flashing_thread = Thread2(target=led_flash)
+        flashing_thread.start()
+        #continue doing stuff
+	x = 0
+	time.sleep(runlen)
+	flashing_thread.stop()
+	sys.exit()
+    else:
+        if flashing_thread and flashing_thread.isAlive():
+            flashing_thread.stop()
