@@ -1,0 +1,9 @@
+[Unit]
+Description=Flash LED on network
+
+[Service]
+Type=simple
+ExecStart= python /usr/bin/flashled 5 .1 .5 5
+
+[Install]
+WantedBy=multi-user.target
