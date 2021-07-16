@@ -1,0 +1,9 @@
+[Unit]
+Description=Flash on octoprint ready
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/bin/octowatch.sh
+
+[Install]
+WantedBy=multi-user.target
