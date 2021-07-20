@@ -4,11 +4,11 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "Octoprint Power, Stop and Beacon PI Hat"
 Date ""
 Rev ""
 Comp ""
-Comment1 ""
+Comment1 "Warning this is a preliminary drawning - Use at your own Risk !"
 Comment2 ""
 Comment3 ""
 Comment4 ""
