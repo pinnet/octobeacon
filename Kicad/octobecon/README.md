@@ -1,3 +1,3 @@
 # Kicad Schmatic Capture
 
-![Schmatic](img/octoprintHat.png)
+![Schmatic](/img/octoprintHat.png)
