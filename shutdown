@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+echo 'Shutdown-FLASH (C)dannyarnold.com 2021'
+let cancel=0
+let length=60
+
+while getopts crhHk flag
+do
+    case "${flag}" in
+        c) cancel=1;;
+    esac
+done
+
+flashled 5 .1 .1 $length &
+
+if [ $cancel -ge 1 ]
+then
+        echo 'Cancel'
+        killall flashled
+fi
+
+shutdownold "$@"
